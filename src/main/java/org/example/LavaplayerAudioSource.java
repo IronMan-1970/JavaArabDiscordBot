@@ -77,6 +77,12 @@ public class LavaplayerAudioSource extends AudioSourceBase {
                                 Button.success("next", "next")))
                 .send(channel).join();
 
+        api.addServerVoiceChannelMemberLeaveListener(event -> {
+            // Replace "YOUR_BOT_ID" with the ID of your bot user
+            if (event.getUser().isBot()) {
+                initialMessage.delete();
+            }
+        });
         play(list, api, audioConnection, i, channel,initialMessage);
     }
 
@@ -93,9 +99,10 @@ public class LavaplayerAudioSource extends AudioSourceBase {
             playerManager.loadItem(list.get(i), new AudioLoadResultHandler() {
                 @Override
                 public void trackLoaded(AudioTrack track) {
-                    player.playTrack(track);
                     String trackName = track.getInfo().title;
                     initialMessage.edit(trackName);
+                    player.playTrack(track);
+
 
                     long durationInMillis = track.getDuration();
                     try {

@@ -13,14 +13,9 @@ import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.audio.AudioSource;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.interaction.SlashCommand;
-import org.javacord.api.interaction.SlashCommandBuilder;
-import org.javacord.api.interaction.SlashCommandInteraction;
+import org.javacord.api.interaction.*;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.example.LavaplayerAudioSource.playList;
 import static org.example.YouTubeSearch.youTubeSearch;
@@ -36,13 +31,21 @@ public class DiscordAPIBOT {
 
         SlashCommand.with("pray", "Allah Akbar!!!").createGlobal(api).join();
         SlashCommand.with("sieg_heil", "Хай живе перемога!!!!").createGlobal(api).join();
-        SlashCommand.with("based", "Heavy Metal from 80`s").createGlobal(api).join();
+        SlashCommand command = SlashCommand.with("based", "classic from 80`s",
+                Arrays.asList(
+                        SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "heavy_metal", "classic Heavy Metal from 80`s"),
+                        SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "glam", "classic Glam from 80`s"),
+                        SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "trash_metal", "classic Trash Metal from 80`s"),
+                        SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "hard_rock", "classic Heavy Rock from 80`s"),
+                        SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "rock", "classic Rock from 80`s")))
+                .createGlobal(api)
+                .join();
 
 
         api.addSlashCommandCreateListener(event -> {
             SlashCommandInteraction slashCommandInteraction = event.getSlashCommandInteraction();
             TextChannel Tchannel = event.getInteraction().getChannel().get();
-            String name = slashCommandInteraction.getCommandName().toString();
+            String name = slashCommandInteraction.getFullCommandName().toString();
                 ServerVoiceChannel channel = event.getInteraction().getUser().getConnectedVoiceChannel(event.getSlashCommandInteraction().getServer().get()).orElse(null);
                 System.out.println("Server ID: " + channel.getIdAsString());
                 channel.connect().thenAccept(audioConnection -> {

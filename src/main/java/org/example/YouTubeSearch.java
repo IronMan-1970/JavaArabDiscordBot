@@ -33,8 +33,24 @@ public class YouTubeSearch {
                 List<String> videoLinks = getVideoLinks(youtube, "German Marches", 100);
                 return videoLinks;
             }
-            else if (Objects.equals(getAsk, "based")){
-                List<String> videoLinks = getVideoLinks(youtube, "heavy metal 80s rock ", 100);
+            else if (Objects.equals(getAsk, "based heavy_metal")){
+                List<String> videoLinks = getVideoLinks(youtube, "classic Heavy Metal from 80`s", 100);
+                return videoLinks;
+            }
+            else if (Objects.equals(getAsk, "based glam")){
+                List<String> videoLinks = getVideoLinks(youtube, "classic glam from 80`s", 100);
+                return videoLinks;
+            }
+            else if (Objects.equals(getAsk, "based trash_metal")){
+                List<String> videoLinks = getVideoLinks(youtube, "classic Trash Metal from 80`s", 100);
+                return videoLinks;
+            }
+            else if (Objects.equals(getAsk, "based hard_rock")){
+                List<String> videoLinks = getVideoLinks(youtube, "classic Heavy Rock from 80`s", 100);
+                return videoLinks;
+            }
+            else if (Objects.equals(getAsk, "based rock")){
+                List<String> videoLinks = getVideoLinks(youtube, "classic Rock from 80`s", 100);
                 return videoLinks;
             }
             // Process the video links
