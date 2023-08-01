@@ -14,6 +14,7 @@ import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
 import org.javacord.api.audio.AudioSourceBase;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.component.ActionRow;
 import org.javacord.api.entity.message.component.Button;
@@ -63,23 +64,23 @@ public class LavaplayerAudioSource extends AudioSourceBase {
         return new LavaplayerAudioSource(getApi(), audioPlayer);
     }
 
-    public static void playList(String getAsk, DiscordApi api, AudioConnection audioConnection, TextChannel channel ){
+    public static void playList(String getAsk, DiscordApi api, AudioConnection audioConnection, TextChannel channel ) {
 
         List<String> list = youTubeSearch(getAsk);
         int i = 0;
-        play( list, api,  audioConnection, i , channel);
 
-        new MessageBuilder()
+        Message initialMessage = new MessageBuilder()
                 .setContent("Click on one of these Buttons!")
                 .addComponents(
                         ActionRow.of(
                                 Button.success("previous", "previous"),
                                 Button.success("next", "next")))
-                .send(channel);
+                .send(channel).join();
 
+        play(list, api, audioConnection, i, channel,initialMessage);
+    }
 
-        }
-    public static void play( List<String> list,DiscordApi api, AudioConnection audioConnection,int i ,TextChannel channel){
+    public static void play( List<String> list,DiscordApi api, AudioConnection audioConnection,int i ,TextChannel channel, Message initialMessage){
         AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
         playerManager.registerSourceManager(new YoutubeAudioSourceManager());
         AudioPlayer player = playerManager.createPlayer();
@@ -93,13 +94,17 @@ public class LavaplayerAudioSource extends AudioSourceBase {
                 @Override
                 public void trackLoaded(AudioTrack track) {
                     player.playTrack(track);
+                    String trackName = track.getInfo().title;
+                    initialMessage.edit(trackName);
+
                     long durationInMillis = track.getDuration();
                     try {
                         Thread.sleep(durationInMillis);
-                        play(list, api,  audioConnection, i+1 , channel);
+                        play(list, api,  audioConnection, i+1 , channel,initialMessage);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+
                 }
 
                 @Override
@@ -124,9 +129,9 @@ public class LavaplayerAudioSource extends AudioSourceBase {
 
         api.addButtonClickListener(buttonClickEvent -> {
             if(buttonClickEvent.getButtonInteraction().getCustomId().equals("previous"))
-            {play( list, api,  audioConnection, i-1 , channel);}
+            {play( list, api,  audioConnection, i-1 , channel,initialMessage);}
             else if (buttonClickEvent.getButtonInteraction().getCustomId().equals("next"))
-            { play(list, api,  audioConnection, i+1 , channel);}
+            { play(list, api,  audioConnection, i+1 , channel,initialMessage);}
         });
 
     }
