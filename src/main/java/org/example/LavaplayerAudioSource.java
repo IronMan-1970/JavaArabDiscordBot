@@ -13,12 +13,17 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.audio.AudioConnection;
 import org.javacord.api.audio.AudioSource;
 import org.javacord.api.audio.AudioSourceBase;
+import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.MessageBuilder;
+import org.javacord.api.entity.message.component.ActionRow;
+import org.javacord.api.entity.message.component.Button;
 
 import java.util.List;
 
 import static org.example.YouTubeSearch.youTubeSearch;
 
 public class LavaplayerAudioSource extends AudioSourceBase {
+
 
     private final AudioPlayer audioPlayer;
     private AudioFrame lastFrame;
@@ -58,19 +63,43 @@ public class LavaplayerAudioSource extends AudioSourceBase {
         return new LavaplayerAudioSource(getApi(), audioPlayer);
     }
 
-    public static void playList(String getAsk, DiscordApi api, AudioConnection audioConnection){
+    public static void playList(String getAsk, DiscordApi api, AudioConnection audioConnection, TextChannel channel ){
+
+        List<String> list = youTubeSearch(getAsk);
+        int i = 0;
+        play( list, api,  audioConnection, i , channel);
+
+        new MessageBuilder()
+                .setContent("Click on one of these Buttons!")
+                .addComponents(
+                        ActionRow.of(
+                                Button.success("previous", "previous"),
+                                Button.success("next", "next")))
+                .send(channel);
+
+
+        }
+    public static void play( List<String> list,DiscordApi api, AudioConnection audioConnection,int i ,TextChannel channel){
         AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
         playerManager.registerSourceManager(new YoutubeAudioSourceManager());
         AudioPlayer player = playerManager.createPlayer();
 
-        List<String> list = youTubeSearch(getAsk);
-        for (String song : list) {
+
+
+
             AudioSource source = new LavaplayerAudioSource(api, player);
             audioConnection.setAudioSource(source);
-            playerManager.loadItem(song, new AudioLoadResultHandler() {
+            playerManager.loadItem(list.get(i), new AudioLoadResultHandler() {
                 @Override
                 public void trackLoaded(AudioTrack track) {
                     player.playTrack(track);
+                    long durationInMillis = track.getDuration();
+                    try {
+                        Thread.sleep(durationInMillis);
+                        play(list, api,  audioConnection, i+1 , channel);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
 
                 @Override
@@ -90,6 +119,15 @@ public class LavaplayerAudioSource extends AudioSourceBase {
                     // Notify the user that everything exploded
                 }
             });
-        }}
 
+
+
+        api.addButtonClickListener(buttonClickEvent -> {
+            if(buttonClickEvent.getButtonInteraction().getCustomId().equals("previous"))
+            {play( list, api,  audioConnection, i-1 , channel);}
+            else if (buttonClickEvent.getButtonInteraction().getCustomId().equals("next"))
+            { play(list, api,  audioConnection, i+1 , channel);}
+        });
+
+    }
 }

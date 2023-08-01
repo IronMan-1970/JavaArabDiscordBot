@@ -12,6 +12,7 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.audio.AudioSource;
 import org.javacord.api.entity.channel.ServerVoiceChannel;
+import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandBuilder;
 import org.javacord.api.interaction.SlashCommandInteraction;
@@ -40,11 +41,12 @@ public class DiscordAPIBOT {
 
         api.addSlashCommandCreateListener(event -> {
             SlashCommandInteraction slashCommandInteraction = event.getSlashCommandInteraction();
+            TextChannel Tchannel = event.getInteraction().getChannel().get();
             String name = slashCommandInteraction.getCommandName().toString();
                 ServerVoiceChannel channel = event.getInteraction().getUser().getConnectedVoiceChannel(event.getSlashCommandInteraction().getServer().get()).orElse(null);
                 System.out.println("Server ID: " + channel.getIdAsString());
                 channel.connect().thenAccept(audioConnection -> {
-                    playList(name,api,audioConnection);
+                    playList(name,api,audioConnection,Tchannel);
                 }).exceptionally(e -> {
                     // Failed to connect to voice channel (no permissions?)
                     e.printStackTrace();
