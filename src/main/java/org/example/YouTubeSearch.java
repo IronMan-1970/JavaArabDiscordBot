@@ -19,14 +19,14 @@ import java.util.Objects;
 public class YouTubeSearch {
     private static final String APPLICATION_NAME = "PrayDiscordBot";
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private static final String API_KEY = "AIzaSyATJRz79hmUIUt3_SASdoyBX7wiGrrRTrw";
+    private static final String API_KEY = "AIzaSyCp1zeGiWcQpI_ikr2uBqysqC78518CUAA";
 
     public static List<String> youTubeSearch(String getAsk) {
         try {
 
             YouTube youtube = getService();
             if(Objects.equals(getAsk, "pray")){
-            List<String> videoLinks = getVideoLinks(youtube, "arab patriotic songs", 100);
+            List<String> videoLinks = getVideoLinks(youtube, "islamic arab songs", 100);
                     return videoLinks;
                 }
             else if (Objects.equals(getAsk, "sieg_heil")){
@@ -34,31 +34,31 @@ public class YouTubeSearch {
                 return videoLinks;
             }
             else if (Objects.equals(getAsk, "based heavy_metal")){
-                List<String> videoLinks = getVideoLinks(youtube, "classic Heavy Metal from 80`s", 100);
+                List<String> videoLinks = getVideoLinks(youtube, "Heavy Metal from 80`s", 100);
                 return videoLinks;
             }
             else if (Objects.equals(getAsk, "based glam")){
-                List<String> videoLinks = getVideoLinks(youtube, "classic glam from 80`s", 100);
+                List<String> videoLinks = getVideoLinks(youtube, "Glam rock playlist", 100);
                 return videoLinks;
             }
             else if (Objects.equals(getAsk, "based trash_metal")){
-                List<String> videoLinks = getVideoLinks(youtube, "classic Trash Metal from 80`s", 100);
+                List<String> videoLinks = getVideoLinks(youtube, "Trash Metal 80`s", 100);
                 return videoLinks;
             }
             else if (Objects.equals(getAsk, "based hard_rock")){
-                List<String> videoLinks = getVideoLinks(youtube, "classic Heavy Rock from 80`s", 100);
+                List<String> videoLinks = getVideoLinks(youtube, "classic Heavy Rock", 100);
                 return videoLinks;
             }
             else if (Objects.equals(getAsk, "based rock")){
-                List<String> videoLinks = getVideoLinks(youtube, "classic Rock from 80`s", 100);
+                List<String> videoLinks = getVideoLinks(youtube, "classic Rock", 100);
                 return videoLinks;
             }
             // Process the video links
 
         } catch (GeneralSecurityException | IOException e) {
-            return Collections.singletonList("");
+            return Collections.singletonList("https://youtu.be/PSuJOqNls2Y");
         }
-        return Collections.singletonList("");
+        return Collections.singletonList("https://youtu.be/PSuJOqNls2Y");
     }
 
     private static YouTube getService() throws GeneralSecurityException, IOException {

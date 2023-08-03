@@ -91,9 +91,6 @@ public class LavaplayerAudioSource extends AudioSourceBase {
         playerManager.registerSourceManager(new YoutubeAudioSourceManager());
         AudioPlayer player = playerManager.createPlayer();
 
-
-
-
             AudioSource source = new LavaplayerAudioSource(api, player);
             audioConnection.setAudioSource(source);
             playerManager.loadItem(list.get(i), new AudioLoadResultHandler() {

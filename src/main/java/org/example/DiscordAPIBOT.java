@@ -25,7 +25,7 @@ public class DiscordAPIBOT {
     public static void DiscordBot()
     {
         DiscordApi api = new DiscordApiBuilder()
-                .setToken("MTEzNDQ5NTczNDEwOTA1NzE5NA.G6h5Gf.qkdE1-iKgNIO62-9jmjHos4-HwdMYhHK2Hqmg8")
+                .setToken("MTEzNDQ5NTczNDEwOTA1NzE5NA.G5zGgV.1CVG2dFnXGd2gP54y6BOMj5LP-_2qAVWZwYBpo")
                 .login().join();
         System.out.println(api.createBotInvite());
 
