@@ -19,7 +19,9 @@ import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.component.ActionRow;
 import org.javacord.api.entity.message.component.Button;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.example.YouTubeSearch.youTubeSearch;
 
@@ -64,18 +66,30 @@ public class LavaplayerAudioSource extends AudioSourceBase {
         return new LavaplayerAudioSource(getApi(), audioPlayer);
     }
 
-    public static void playList(String getAsk, DiscordApi api, AudioConnection audioConnection, TextChannel channel ) {
-
-        List<String> list = youTubeSearch(getAsk);
+    public static void playList(String getAsk, DiscordApi api, AudioConnection audioConnection, TextChannel channel, String option ) {
+        List<String> list= new ArrayList<>();
+        Message initialMessage;
+        if (Objects.equals(getAsk, "play"))
+        {
+            list.add(option);
+            initialMessage = new MessageBuilder()
+                    .setContent("Click on one of these Buttons!")
+                    .send(channel)
+                    .join();
+        }
+        else {
+             list = youTubeSearch(getAsk);
+            initialMessage = new MessageBuilder()
+                    .setContent("Click on one of these Buttons!")
+                    .addComponents(
+                            ActionRow.of(
+                                    Button.success("previous", "previous"),
+                                    Button.success("next", "next")))
+                    .send(channel).join();
+        }
         int i = 0;
 
-        Message initialMessage = new MessageBuilder()
-                .setContent("Click on one of these Buttons!")
-                .addComponents(
-                        ActionRow.of(
-                                Button.success("previous", "previous"),
-                                Button.success("next", "next")))
-                .send(channel).join();
+
 
         api.addServerVoiceChannelMemberLeaveListener(event -> {
             // Replace "YOUR_BOT_ID" with the ID of your bot user
@@ -97,7 +111,7 @@ public class LavaplayerAudioSource extends AudioSourceBase {
                 @Override
                 public void trackLoaded(AudioTrack track) {
                     String trackName = track.getInfo().title;
-                    initialMessage.edit(trackName);
+                    initialMessage.edit(":place_of_worship: Now playing: "+trackName);
                     player.playTrack(track);
 
 

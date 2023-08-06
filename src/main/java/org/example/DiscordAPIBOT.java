@@ -17,6 +17,7 @@ import org.javacord.api.interaction.*;
 
 import java.util.*;
 
+import static org.example.LavaplayerAudioSource.play;
 import static org.example.LavaplayerAudioSource.playList;
 import static org.example.YouTubeSearch.youTubeSearch;
 
@@ -30,6 +31,10 @@ public class DiscordAPIBOT {
         System.out.println(api.createBotInvite());
 
         SlashCommand.with("pray", "Allah Akbar!!!").createGlobal(api).join();
+        SlashCommand.with("play", "Комісарчук лох")
+                .addOption(SlashCommandOption.createStringOption("Link","Ваша попса",true))
+                        .createGlobal(api)
+                        .join();
         SlashCommand.with("sieg_heil", "Хай живе перемога!!!!").createGlobal(api).join();
         SlashCommand command = SlashCommand.with("based", "classic from 80`s",
                 Arrays.asList(
@@ -49,7 +54,12 @@ public class DiscordAPIBOT {
                 ServerVoiceChannel channel = event.getInteraction().getUser().getConnectedVoiceChannel(event.getSlashCommandInteraction().getServer().get()).orElse(null);
                 System.out.println("Server ID: " + channel.getIdAsString());
                 channel.connect().thenAccept(audioConnection -> {
-                    playList(name,api,audioConnection,Tchannel);
+                    if (event.getSlashCommandInteraction().getCommandName().equals("play")){
+
+                        playList(name,api,audioConnection,Tchannel,event.getSlashCommandInteraction().getOptionByName("link").get().getStringValue().get().toString());
+                    }
+                    else{
+                    playList(name,api,audioConnection,Tchannel,"");}
                 }).exceptionally(e -> {
                     // Failed to connect to voice channel (no permissions?)
                     e.printStackTrace();
