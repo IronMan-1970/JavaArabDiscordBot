@@ -31,7 +31,7 @@ public class DiscordAPIBOT {
         System.out.println(api.createBotInvite());
 
         SlashCommand.with("pray", "Allah Akbar!!!").createGlobal(api).join();
-        SlashCommand.with("play", "Комісарчук лох")
+        SlashCommand.with("play", "Play any music whatever u want")
                 .addOption(SlashCommandOption.createStringOption("Link","Ваша попса",true))
                         .createGlobal(api)
                         .join();
