@@ -35,7 +35,7 @@ public class DiscordAPIBOT {
                 .addOption(SlashCommandOption.createStringOption("Link","Ваша попса",true))
                         .createGlobal(api)
                         .join();
-        SlashCommand.with("sieg_heil", "Хай живе перемога!!!!").createGlobal(api).join();
+        SlashCommand.with("militar", "Хай живе перемога!!!!").createGlobal(api).join();
         SlashCommand command = SlashCommand.with("based", "classic from 80`s",
                 Arrays.asList(
                         SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "heavy_metal", "classic Heavy Metal from 80`s"),
