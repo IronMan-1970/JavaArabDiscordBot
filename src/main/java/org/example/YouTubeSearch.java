@@ -29,7 +29,7 @@ public class YouTubeSearch {
             List<String> videoLinks = getVideoLinks(youtube, "islamic arab songs", 100);
                     return videoLinks;
                 }
-            else if (Objects.equals(getAsk, "sieg_heil")){
+            else if (Objects.equals(getAsk, "militar")){
                 List<String> videoLinks = getVideoLinks(youtube, "German Marches", 100);
                 return videoLinks;
             }
